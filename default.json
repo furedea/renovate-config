@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Shared Renovate preset for furedea repositories.",
+  "extends": [
+    "config:recommended",
+    "schedule:weekly",
+    ":pinAllExceptPeerDependencies",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "mode": "full",
+  "dependencyDashboard": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"],
+    "dependencyDashboardApproval": false,
+    "rangeStrategy": "update-lockfile",
+    "prCreation": "immediate",
+    "minimumReleaseAge": null,
+    "vulnerabilityFixStrategy": "lowest"
+  },
+  "packageRules": [
+    {
+      "description": "Wait for PyPI packages to satisfy uv exclude-newer.",
+      "matchDatasources": ["pypi"],
+      "minimumReleaseAge": "7 days",
+      "internalChecksFilter": "strict"
+    },
+    {
+      "description": "Keep requires-python as a hand-chosen lower bound: the exact Python version lives in .python-version and Nix.",
+      "matchManagers": ["pep621"],
+      "matchDepTypes": ["requires-python"],
+      "enabled": false
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "nix": {
+    "enabled": true
+  }
+}
