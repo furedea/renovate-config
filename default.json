@@ -26,6 +26,18 @@
       "internalChecksFilter": "strict"
     },
     {
+      "description": "Wait for crates.io packages before opening updates.",
+      "matchDatasources": ["crate"],
+      "minimumReleaseAge": "7 days",
+      "internalChecksFilter": "strict"
+    },
+    {
+      "description": "Wait for npm packages to satisfy pnpm minimumReleaseAge.",
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "7 days",
+      "internalChecksFilter": "strict"
+    },
+    {
       "description": "Keep requires-python as a hand-chosen lower bound: the exact Python version lives in .python-version and Nix.",
       "matchManagers": ["pep621"],
       "matchDepTypes": ["requires-python"],
