@@ -21,6 +21,7 @@
           nixpkgs-unstable.legacyPackages.${system}.lefthook
           ls-lint
           nixfmt
+          renovate
           statix
           # Add language toolchain here (uv, pnpm, cargo, go, ...).
         ];

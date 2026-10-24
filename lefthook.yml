@@ -15,5 +15,8 @@ pre-commit:
     deadnix:
       glob: "*.nix"
       run: deadnix --fail .
+    renovate-config:
+      glob: "{default,renovate}.json"
+      run: renovate-config-validator --strict --no-global default.json renovate.json
     ls-lint:
       run: ls_lint
