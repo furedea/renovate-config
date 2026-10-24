@@ -42,9 +42,26 @@ jobs:
       - name: Run deadnix
         run: nix run nixpkgs#deadnix -- --fail .
 
+  renovate-config:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+
+      - name: Validate Renovate configs
+        run: nix develop --command renovate-config-validator --strict --no-global default.json renovate.json
+
   all-green:
     if: always()
-    needs: [nix-lint]
+    needs: [nix-lint, renovate-config]
     runs-on: ubuntu-latest
     timeout-minutes: 1
     permissions: {}

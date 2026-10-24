@@ -9,21 +9,33 @@
   outputs =
     { nixpkgs, nixpkgs-unstable, ... }:
     let
-      system = "aarch64-darwin";
-      pkgs = import nixpkgs { inherit system; };
+      # CI runs on x86_64-linux; local development is on aarch64-darwin.
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
+      mkDevShell =
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        pkgs.mkShell {
+          packages = with pkgs; [
+            commitlint
+            deadnix
+            # lefthook before 2.1.6 runs hooks under a pty, which agent sandboxes deny.
+            nixpkgs-unstable.legacyPackages.${system}.lefthook
+            ls-lint
+            nixfmt
+            renovate
+            statix
+            # Add language toolchain here (uv, pnpm, cargo, go, ...).
+          ];
+        };
     in
     {
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          commitlint
-          deadnix
-          # lefthook before 2.1.6 runs hooks under a pty, which agent sandboxes deny.
-          nixpkgs-unstable.legacyPackages.${system}.lefthook
-          ls-lint
-          nixfmt
-          statix
-          # Add language toolchain here (uv, pnpm, cargo, go, ...).
-        ];
-      };
+      devShells = nixpkgs.lib.genAttrs systems (system: {
+        default = mkDevShell system;
+      });
     };
 }
