@@ -38,6 +38,17 @@
       "internalChecksFilter": "strict"
     },
     {
+      "description": "Wait for Go modules before opening updates.",
+      "matchDatasources": ["go"],
+      "minimumReleaseAge": "7 days",
+      "internalChecksFilter": "strict"
+    },
+    {
+      "description": "Run go mod tidy after Go module updates to keep go.sum tidy.",
+      "matchManagers": ["gomod"],
+      "postUpdateOptions": ["gomodTidy"]
+    },
+    {
       "description": "Keep requires-python as a hand-chosen lower bound: the exact Python version lives in .python-version and Nix.",
       "matchManagers": ["pep621"],
       "matchDepTypes": ["requires-python"],
