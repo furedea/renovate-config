@@ -59,9 +59,17 @@ jobs:
       - name: Validate Renovate configs
         run: nix develop --command renovate-config-validator --strict --no-global default.json renovate.json
 
+  claude-review:
+    uses: furedea/reusable-workflows/.github/workflows/claude-review.yml@fc0cba95e88e0cdad9837bf8212d324f3cad50a5 # main
+    permissions:
+      contents: read
+      pull-requests: write
+    secrets:
+      claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
   all-green:
     if: always()
-    needs: [nix-lint, renovate-config]
+    needs: [nix-lint, renovate-config, claude-review]
     runs-on: ubuntu-latest
     timeout-minutes: 1
     permissions: {}
